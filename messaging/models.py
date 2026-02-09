@@ -13,4 +13,5 @@ class Message(models.Model):
          "fr": "FR_" + self.text,
          "es": "ES_" + self.text,
      }
-     return translations.get("en")
+     #return translations.get("en")
+     return translations.get(self.language, self.text)
