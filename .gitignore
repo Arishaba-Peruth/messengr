@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+.envrc/
+
+# Django
+db.sqlite3
+*.log
+media/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code / IDEs
+.vscode/
+.idea/
+
+# Node (if you use it)
+node_modules/
+
+# Migrations (optional, only if you want)
+# **/migrations/*
+# !**/migrations/__init__.py
