@@ -17,6 +17,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Message.objects.create(
+            #Custom validate() method to prevent self-messaging
             sender=validated_data['sender'],
             recipient=validated_data['recipient'],
             text=validated_data['text'],

@@ -6,6 +6,9 @@ from .models import Message
 
 # ==================== Model Tests ====================
 
+
+#Added 11 new tests (13 total)Impact: Comprehensive test coverage for all functionality
+
 @pytest.mark.django_db
 def test_translation():
     """Test that messages are correctly translated to the specified language."""

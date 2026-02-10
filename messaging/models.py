@@ -15,3 +15,4 @@ class Message(models.Model):
      }
      #return translations.get("en")
      return translations.get(self.language, self.text)
+#This allowstranslation logic work accordingly

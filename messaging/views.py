@@ -2,9 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from django.contrib.auth.models import User
 from .models import Message
 from .serializers import MessageSerializer
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    """SessionAuthentication without CSRF checks for API endpoints."""
+    def enforce_csrf(self, request):
+        return  # Skip CSRF check
 
 class MessageCreateView(APIView):
     """
@@ -13,13 +19,15 @@ class MessageCreateView(APIView):
     
     Requires authentication. The authenticated user becomes the sender.
     """
+    authentication_classes = [TokenAuthentication, CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
         """Create a message from the authenticated user to a recipient."""
         # Add the authenticated user as the sender
+        #use actual request data
         data = request.data.copy()
-        data['sender'] = request.user.id
+        data['sender'] = request.user.id #use authenticated user
         
         serializer = MessageSerializer(data=data)
         if serializer.is_valid():
@@ -44,11 +52,13 @@ class InboxView(APIView):
     
     Messages are returned with text translated to the recipient's preferred language.
     """
+    #Added permission_classes = [IsAuthenticated] to both views to ensure only authenticated users can access them
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
         """Get all messages for the authenticated user, translated to their language."""
         # Get all messages where the authenticated user is the recipient
+        #show authenticated user's inbox
         msgs = Message.objects.filter(recipient=request.user).select_related('sender')
         
         # Serialize the messages
