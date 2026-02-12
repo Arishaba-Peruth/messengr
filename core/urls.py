@@ -1,7 +1,28 @@
-from django.urls import path
-from messaging.views import MessageCreateView, InboxView
+# project/urls.py
+from django.contrib import admin
+from django.urls import path, include
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Messaging API",
+      default_version='v1',
+      description="API for sending and receiving messages",
+      contact=openapi.Contact(email="support@example.com"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
- path("api/messages/", MessageCreateView.as_view()),
- path("api/messages/inbox/", InboxView.as_view()),
+    path('admin/', admin.site.urls),
+    path('api/', include('messaging.urls')),  # your app URLs
+
+    # Swagger UI
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
+    # ReDoc (optional)
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
